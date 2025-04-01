@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { Fill, ReExtProvider } from "@sencha/reext";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Header from "./Header";
+import MainContainer from "./MainContainer";
 
 
 Fill();
@@ -52,6 +53,7 @@ reactroot.render(
           }}
         >
           <Header />
+          <MainContainer />
           <Routes>
             {/* <Route path="/about" element={<About />} />
             <Route path="/chart" element={<CryptoChart />} />
