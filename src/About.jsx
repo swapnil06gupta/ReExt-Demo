@@ -2,7 +2,7 @@ import ReExt from "@sencha/reext";
 import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 
-function About() {
+const About = () => {
   const [row, setRow] = useState(null);
   const [direction, setDirection] = useState("row");
   const directionRef = useRef();
@@ -10,7 +10,6 @@ function About() {
 
   return (
     <>
-      sdkjkjdkjs
       <div style={{ height: '30px', display: 'flex', justifyContent: 'flex-start', marginBottom: '10px' }}>
         <Link to="/chart">
           <ReExt xtype='button'

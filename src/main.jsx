@@ -1,12 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Fill, ReExtProvider } from "@sencha/reext";
-import App from "./App";
+// import App from "./App";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import About from "./about";
-import CryptoChart from "./Chart";
-import GetChartHtml from "./drag&drop";
+// import About from "./about";
+// import CryptoChart from "./Chart";
+// import GetChartHtml from "./drag&drop";
 import Header from "./Header";
+// import About from "./About";
+
 
 Fill();
 var reactroot = ReactDOM.createRoot(document.getElementById("root"));
