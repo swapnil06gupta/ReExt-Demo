@@ -25,7 +25,7 @@ var ReExtData = {
   },
   rtl: false,
   locale: "en",
-  debug: true,
+  debug: false,
   urlbase: "./",
   location: "remote",
   overrides: false,
