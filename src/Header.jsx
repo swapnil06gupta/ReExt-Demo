@@ -1,7 +1,7 @@
 import "../public/header.css";
 import logo from "../public/growth.png";
 import ReExt from "@sencha/reext";
-import About from "./about";
+// import About from "./about";
 import { useEffect, useState } from "react";
 import Cards from "./Cards";
 
@@ -83,7 +83,8 @@ const Header = () => {
             <Cards cryptos={cryptos} />
           </ReExt>
           <ReExt xtype="container" title="Tab 2" itemId="tab2" iconCls="x-fa fa-cogs">
-            <About />
+            {/* <About /> */}
+            <div>dfufjkdkj</div>
           </ReExt>
         </ReExt>
       </header >

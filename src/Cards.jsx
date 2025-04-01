@@ -1,5 +1,4 @@
 import ReExt from "@sencha/reext";
-import About from "./about";
 
 const Cards = ({ cryptos }) => {
   const renderCryptoCardItems = (crypto) => [
@@ -70,7 +69,7 @@ const Cards = ({ cryptos }) => {
       }}>
 
         <div>Top Gainers</div>
-        <About />
+        {/* <About /> */}
       </div>
     </>
   );

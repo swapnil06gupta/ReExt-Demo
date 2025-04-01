@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ReExt from '@sencha/reext'; // Importing the Chart component from ReExt
-// import { Cards } from './Cards';
+import ReExt from '@sencha/reext';
 
 // Sample cryptocurrency data
 const cryptoData = [
@@ -30,7 +29,6 @@ const CryptoChart = () => {
   return (
     <>
       <div style={{ display: "flex" }}>
-        {/* <Cards /> */}
 
       </div>
       <div style={{ padding: '20px', maxWidth: '800px', margin: 'auto' }}>
