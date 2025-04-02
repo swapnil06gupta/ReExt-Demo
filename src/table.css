@@ -1,0 +1,16 @@
+/* .x-column-header {
+  background-color: #5a6f7c !important;
+  border: 1px solid #ffa559 !important;
+} */
+.x-grid-row {
+  color: #eeeeee !important;
+  background-color: #5a6f7c !important;
+  border: 1px solid #ffa559 !important;
+}
+.x-grid-row:hover {
+  background-color: #1e3e62 !important;
+}
+
+.x-panel-header-default {
+  display: none;
+}

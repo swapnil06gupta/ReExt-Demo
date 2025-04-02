@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
 import Cards from "./Cards";
 import ReExt from "@sencha/reext";
+import Table from "./AllCoinTable";
+import CryptoGrid from "./DetailedCard";
 
 const MainContainer = () => {
   const [trendingData, setTrendingData] = useState([]);
   const [topGainers, setTopGainers] = useState([]);
+  const [fetchAll, setFetchAll] = useState([])
   const [topLosers, setTopLosers] = useState([]);
   const [isLoading, setIsLoading] = useState({
     trending: true,
     gainers: true,
-    losers: true
+    losers: true,
+    all: true
   });
   const [error, setError] = useState(null);
-
   const loadTrendingData = async () => {
     try {
       const response = await fetch(
@@ -43,11 +46,10 @@ const MainContainer = () => {
       );
       if (!response.ok) throw new Error("Failed to fetch market data");
       const data = await response.json();
-
+      setFetchAll(data)
       const sortedCoins = [...data].sort((a, b) =>
         b.price_change_percentage_24h - a.price_change_percentage_24h
       );
-
       const topGainersData = sortedCoins
         .filter(coin => coin.price_change_percentage_24h > 0)
         .slice(0, 10)
@@ -56,7 +58,8 @@ const MainContainer = () => {
           image: coin.image,
           price: coin.current_price,
           symbol: coin.symbol.toUpperCase(),
-          change: coin.price_change_percentage_24h
+          volume: coin.total_volume,
+          changePer24h: coin.price_change_percentage_24h
         }));
 
       const topLosersData = sortedCoins
@@ -67,7 +70,8 @@ const MainContainer = () => {
           image: coin.image,
           price: coin.current_price,
           symbol: coin.symbol.toUpperCase(),
-          change: coin.price_change_percentage_24h
+          volume: coin.total_volume,
+          changePer24h: coin.price_change_percentage_24h
         }));
 
       setTopGainers(topGainersData);
@@ -76,7 +80,7 @@ const MainContainer = () => {
       console.error("Error fetching market data:", error);
       setError(error.message);
     } finally {
-      setIsLoading(prev => ({ ...prev, gainers: false, losers: false }));
+      setIsLoading(prev => ({ ...prev, gainers: false, losers: false, all: false }));
     }
   };
 
@@ -127,44 +131,47 @@ const MainContainer = () => {
     }
   ];
 
-
   return (<section className="sub-header">
     {error ? (
       <div className="error-message">
         Error loading data: {error}
       </div>
     ) : (
-      <ReExt
-        xtype="tabpanel"
-        style={{ width: "100%", minHeight: "500px" }}
-        cls="custom-tab-panel"
-        config={{
-          activeTab: 0,
-          tabBar: {
-            style: {
-              marginLeft: "25px",
-              backgroundColor: "transparent",
-              height: "53px",
-              boxShadow: "0 6px 5px rgba(0, 0, 0, 0.1)"
+      <>
+        <ReExt
+          xtype="tabpanel"
+          style={{ width: "100%", minHeight: "200px" }}
+          cls="custom-tab-panel"
+          config={{
+            activeTab: 0,
+            tabBar: {
+              style: {
+                backgroundColor: "transparent",
+                height: "53px",
+                wdith: "100%",
+                boxShadow: "0 6px 5px rgba(0, 0, 0, 0.1)"
+              }
             }
-          }
-        }}
-      >
-        {tabs.map((tab) => (
-          <ReExt
-            xtype="container"
-            title={tab.title}
-            itemId={tab.id}
-            key={tab.id}
-          >
-            {tab.loading ? (
-              <div className="loading-spinner">Loading...</div>
-            ) : (
-              <Cards data={tab.data} />
-            )}
-          </ReExt>
-        ))}
-      </ReExt>
+          }}
+        >
+          {tabs.map((tab) => (
+            <ReExt
+              xtype="container"
+              title={tab.title}
+              itemId={tab.id}
+              key={tab.id}
+            >
+              {tab.loading ? (
+                <div className="loading-spinner">Loading...</div>
+              ) : (
+                <Cards data={tab.data} />
+              )}
+            </ReExt>
+          ))}
+        </ReExt>
+        {topGainers.length > 0 && <CryptoGrid data={topGainers} />}
+        {/* {!!fetchAll && <Table data={fetchAll} />} */}
+      </>
     )}
   </section>)
 }
