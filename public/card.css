@@ -15,12 +15,13 @@
 .x-dataview-item {
   border: 1px solid #ddd;
   border-radius: 15px;
-  /* padding: 10px; */
   margin: 10px;
-  width: 250px;
+  width: calc(33.33% - 20px);
+  max-width: 1200px;
   display: inline-block;
   vertical-align: top;
   background: #fff;
+  box-sizing: border-box;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 .card-header {
@@ -67,19 +68,14 @@
   border-radius: 5px;
   font-weight: bold;
 }
-/* Responsive layout */
-@media (max-width: 1200px) {
-  .crypto-card {
-    width: calc(33.33% - 20px); /* 3 cards per row */
-  }
-}
+
 @media (max-width: 768px) {
-  .crypto-card {
-    width: calc(50% - 20px); /* 2 cards per row */
+  .x-dataview-item {
+    width: calc(50% - 20px);
   }
 }
 @media (max-width: 480px) {
-  .crypto-card {
-    width: calc(100% - 20px); /* 1 card per row */
+  .x-dataview-item {
+    width: calc(100% - 20px);
   }
 }

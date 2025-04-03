@@ -9,10 +9,12 @@ const MainContainer = () => {
   const [topGainers, setTopGainers] = useState([]);
   const [fetchAll, setFetchAll] = useState([])
   const [topLosers, setTopLosers] = useState([]);
+  const [topLeaders, setTopLeaders] = useState([]);
   const [isLoading, setIsLoading] = useState({
     trending: true,
     gainers: true,
     losers: true,
+    leader: true,
     all: true
   });
   const [error, setError] = useState(null);
@@ -52,6 +54,17 @@ const MainContainer = () => {
       );
       const topGainersData = sortedCoins
         .filter(coin => coin.price_change_percentage_24h > 0)
+        .slice(0, 6)
+        .map(coin => ({
+          name: coin.name,
+          image: coin.image,
+          price: coin.current_price,
+          symbol: coin.symbol.toUpperCase(),
+          volume: coin.total_volume,
+          changePer24h: coin.price_change_percentage_24h
+        }));
+
+      const topLeadersData = data
         .slice(0, 10)
         .map(coin => ({
           name: coin.name,
@@ -64,7 +77,7 @@ const MainContainer = () => {
 
       const topLosersData = sortedCoins
         .filter(coin => coin.price_change_percentage_24h < 0)
-        .slice(0, 10)
+        .slice(0, 6)
         .map(coin => ({
           name: coin.name,
           image: coin.image,
@@ -76,11 +89,12 @@ const MainContainer = () => {
 
       setTopGainers(topGainersData);
       setTopLosers(topLosersData);
+      setTopLeaders(topLeadersData)
     } catch (error) {
       console.error("Error fetching market data:", error);
       setError(error.message);
     } finally {
-      setIsLoading(prev => ({ ...prev, gainers: false, losers: false, all: false }));
+      setIsLoading(prev => ({ ...prev, gainers: false, losers: false, leader: false, all: false }));
     }
   };
 
@@ -104,6 +118,15 @@ const MainContainer = () => {
   const tabs = [
     {
       id: "tab1",
+      title: "Market Leaders",
+      data: topLeaders.map(item => ({
+        ...item,
+        price: formatPrice(item.price)
+      })),
+      loading: isLoading.leader
+    },
+    {
+      id: "tab2",
       title: "Top Trending",
       data: trendingData.map(item => ({
         ...item,
@@ -111,24 +134,6 @@ const MainContainer = () => {
       })),
       loading: isLoading.trending
     },
-    {
-      id: "tab2",
-      title: "Top Gainers",
-      data: topGainers.map(item => ({
-        ...item,
-        price: formatPrice(item.price)
-      })),
-      loading: isLoading.gainers
-    },
-    {
-      id: "tab3",
-      title: "Top Losers",
-      data: topLosers.map(item => ({
-        ...item,
-        price: formatPrice(item.price)
-      })),
-      loading: isLoading.losers
-    }
   ];
 
   return (<section className="sub-header">
@@ -169,7 +174,22 @@ const MainContainer = () => {
             </ReExt>
           ))}
         </ReExt>
-        {topGainers.length > 0 && <CryptoGrid data={topGainers} />}
+        <div>
+          <span style={{
+            color: "#eeeeee",
+            fontSize: "1.75rem",
+            marginLeft: "10px"
+          }}>Top Gainers</span>
+          {topGainers.length > 0 && <CryptoGrid data={topGainers} />}
+        </div>
+        <div>
+          <span style={{
+            color: "#eeeeee",
+            fontSize: "1.75rem",
+            marginLeft: "10px"
+          }}>Top Losers</span>
+          {topGainers.length > 0 && <CryptoGrid data={topLosers} />}
+        </div>
         {/* {!!fetchAll && <Table data={fetchAll} />} */}
       </>
     )}

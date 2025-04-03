@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./header.css";
 import { useState } from "react";
 
@@ -10,8 +11,12 @@ const Header = () => {
         <img src={'growth.png'} alt="Site Icon" className="header-icon" />
         <span className="header-title">CryptoInsights</span>
         <div className="">
-          <button className="header-btn">Explore</button>
-          <button className="header-btn">Dashboard</button>
+          <Link to="/">
+            <button className="header-btn">Explore</button>
+          </Link>
+          <Link to="/dashboard">
+            <button className="header-btn">Dashboard</button>
+          </Link>
         </div>
       </div>
       <div className="header-center">
@@ -24,6 +29,7 @@ const Header = () => {
         />
       </div>
     </header>
+
   );
 };
 

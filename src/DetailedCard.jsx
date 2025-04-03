@@ -18,7 +18,7 @@ const CryptoGrid = ({ data }) => {
           <span>{volume} USDT</span>
           <span class="volume-label">= NA</span>
         </div>
-        <div class="crypto-change" style="color: {changePer24h:startsWith('-') ? '#c0392b' : '#27ae60'}; background: {changePer24h:startsWith('-') ? '#ffe6e6' : '#e6ffed'};">
+        <div class="crypto-change">
           {changePer24h}
         </div>
       </div>
@@ -27,26 +27,24 @@ const CryptoGrid = ({ data }) => {
 
   return (
     <>
-      <div style={{ padding: '20px' }}>
-        <ReExt
-          xtype="dataview"
-          style={{ height: '400px', overflow: 'auto' }}
-          config={{
-            store: {
-              data: data,
-              proxy: {
-                type: 'memory',
-                reader: {
-                  type: 'json',
-                },
+      <ReExt
+        xtype="dataview"
+        style={{ height: '100%', margin: "20px", overflow: 'auto' }}
+        config={{
+          store: {
+            data: data,
+            proxy: {
+              type: 'memory',
+              reader: {
+                type: 'json',
               },
             },
-            itemTpl: cardTemplate,
-            emptyText: '<p style="text-align: center; padding: 20px;">Loading...</p>',
-            inline: true,
-          }}
-        />
-      </div>
+          },
+          itemTpl: cardTemplate,
+          emptyText: '<p style="text-align: center; padding: 20px;">Loading...</p>',
+          inline: true,
+        }}
+      />
     </>
   );
 };
