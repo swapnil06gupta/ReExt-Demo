@@ -3,11 +3,10 @@ import { useState, useEffect } from 'react';
 
 const CryptoChart = () => {
   const [cryptoDatas, setCryptoDatas] = useState(null);
-  const [chartInterval, setChartInterval] = useState("30"); // Numeric value for days
+  const [chartInterval, setChartInterval] = useState("30");
   const [chartId, setChartId] = useState("bitcoin");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Mapping of display labels to numeric days
   const intervalOptions = [
     { label: "7 Days", value: "7" },
     { label: "30 Days", value: "30" },
@@ -115,7 +114,7 @@ const CryptoChart = () => {
                     }
                   },
                   majorUnit: {
-                    days: chartInterval <= 30 ? 5 : chartInterval <= 90 ? 15 : 30 // Dynamic label spacing
+                    days: chartInterval <= 30 ? 5 : chartInterval <= 90 ? 15 : 30
                   }
                 },
                 {

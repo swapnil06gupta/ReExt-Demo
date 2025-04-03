@@ -1,18 +1,44 @@
 import ReExt from "@sencha/reext";
-// import { useEffect } from "react";
 import "./table.css";
+import React, { useEffect, useState } from "react";
+import { fetchMarketData } from "./Api";
 
-const Table = ({ data }) => {
+const Table = () => {
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const loadTableData = async () => {
+    try {
+      const fetchData = await fetchMarketData();
+      setData(fetchData);
+    } catch (error) {
+      console.error("Error fetching All data:", error);
+      setError(error.message);
+    } finally {
+      setIsLoading((prev) => (false));
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await loadTableData()
+    };
+    fetchData();
+  }, []);
+
   return (
     <>
-      <div style={{
-        color: "#eeeeee",
-        fontSize: "1.75rem",
-        margin: "30px 0px 30px 20px"
-      }}>User Table</div>
       <ReExt
         xtype="grid"
-        style={{ height: "50vh", margin: "20px 20px", backgroundColor: "#5a6f7c", color: "#5a6f7c" }}
+        style={{
+          height: "65vh",
+          maxWidth: "1200px",
+          margin: "0 auto",
+          color: "#5a6f7c",
+          position: "relative",
+          top: "60px",
+        }}
         config={{
           // title: "All List",
           columns: [
@@ -21,7 +47,7 @@ const Table = ({ data }) => {
               dataIndex: "name",
               flex: 1,
               renderer: (value, metaData, data) => {
-                const symbol = data.get('symbol');
+                const symbol = data.get("symbol");
                 return `<div style="font-size: 16px; font-weight: bold;">${symbol.toUpperCase()}</div>
                 <span style="font-size: 10px; color: #eeeeee80;">${value}</span>`;
               },
@@ -39,19 +65,19 @@ const Table = ({ data }) => {
               dataIndex: "price_change_percentage_24h",
               flex: 1,
               renderer: (value) => {
-                if (typeof value !== 'string') value = String(value);
+                if (typeof value !== "string") value = String(value);
                 const color = value.includes("-") ? "#e74c3c" : "#27ae60";
 
                 return `<div style="font-size: 15px; font-weight: 600; color: ${color};">${value}%</div>`;
               },
             },
-            { text: "Volume", dataIndex: "total_volume", flex: 1, },
+            { text: "Volume", dataIndex: "total_volume", flex: 1 },
             {
               text: "24h Price",
               dataIndex: "high_24h",
               flex: 1,
               renderer: (value, metaData, data) => {
-                const low_24h = data.get('low_24h');
+                const low_24h = data.get("low_24h");
                 return `<div style="font-size: 15px; font-weight: 600;">High:${value}</div>
                 <span style="font-size: 10px; color: #eeeeee80;">Low:${low_24h}</span>`;
               },
@@ -60,24 +86,24 @@ const Table = ({ data }) => {
           store: {
             data: data,
             proxy: {
-              type: 'memory',
+              type: "memory",
               reader: {
-                type: 'json',
+                type: "json",
               },
             },
           },
           tbar: [
             {
-              xtype: 'textfield',
-              emptyText: 'Search by name...',
+              xtype: "textfield",
+              emptyText: "Search by name...",
               width: 200,
               listeners: {
                 change: (field, newValue) => {
-                  const grid = field.up('grid');
+                  const grid = field.up("grid");
                   const store = grid.getStore();
                   if (newValue) {
                     store.filterBy((record) => {
-                      const name = record.get('name').toLowerCase();
+                      const name = record.get("name").toLowerCase();
                       return name.includes(newValue.toLowerCase());
                     });
                   } else {

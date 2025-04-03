@@ -10,15 +10,15 @@ const CryptoGrid = ({ data }) => {
         <div class="card-name">{name}</div>
         <div class="crypto-pair">
           <div class="crypto-price">{volume}</div>
-          <div style="text-align: end">Volume</div>
+          <div class="crypo-name" style="text-align: end">Volume</div>
         </div>
       </div>
       <div class="card-body">
         <div class="crypto-volume">
-          <span>{volume} USDT</span>
-          <span class="volume-label">= NA</span>
+          $<span>{price} </span>
+          <span class="volume-label">Price</span>
         </div>
-        <div class="crypto-change">
+        <div class="crypto-change" >
           {changePer24h}
         </div>
       </div>

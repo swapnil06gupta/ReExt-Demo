@@ -1,7 +1,6 @@
 import ReExt from "@sencha/reext";
 
 const Cards = ({ data }) => {
-
   const renderCryptoCardItems = (crypto) => [
     {
       xtype: "container",
@@ -51,8 +50,9 @@ const Cards = ({ data }) => {
             items: renderCryptoCardItems(crypto),
           })),
         }}
-      /> :
-      <div style={{ color: "white" }}>No data available</div>
+      />
+      :
+      <div div style={{ color: "white" }}> No data available</div >
   )
 };
 

@@ -4,8 +4,10 @@ import { Fill, ReExtProvider } from "@sencha/reext";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Header from "./Header";
 import MainContainer from "./MainContainer";
-import CryptoChart from "./Chart";
 import "./index.css"
+import Table from "./AllCoinTable";
+import "./index.css";
+import CryptoChart from "./Chart";
 
 
 Fill();
@@ -53,10 +55,8 @@ reactroot.render(
           <Header />
           <Routes>
             <Route path="/" element={<MainContainer />} />
-            <Route path="/dashboard" element={<CryptoChart />} />
-            {/* <Route path="/chart" element={<CryptoChart />} />
-            <Route path="/drop" element={<GetChartHtml />} />
-            <Route path="/" element={<App />} /> */}
+            <Route path="/dashboard" element={<Table />} />
+            <Route path="/chart" element={<CryptoChart />} />
           </Routes>
         </div>
       </Router>
