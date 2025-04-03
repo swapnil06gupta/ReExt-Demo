@@ -1,91 +1,156 @@
-import React, { useState, useEffect } from 'react';
 import ReExt from '@sencha/reext';
-
-// Sample cryptocurrency data
-const cryptoData = [
-  { time: '2023-03-01', price: 50000 },
-  { time: '2023-03-01', price: 50000 },
-  { time: '2023-03-02', price: 52000 },
-  { time: '2023-03-03', price: 51000 },
-  { time: '2023-03-04', price: 53000 },
-  { time: '2023-03-05', price: 54000 },
-  { time: '2023-03-06', price: 56000 },
-  { time: '2023-03-07', price: 55000 },
-];
+import { useState, useEffect } from 'react';
 
 const CryptoChart = () => {
-  const [data, setData] = useState(cryptoData);
+  const [cryptoDatas, setCryptoDatas] = useState(null);
+  const [chartInterval, setChartInterval] = useState("30"); // Numeric value for days
+  const [chartId, setChartId] = useState("bitcoin");
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Mapping of display labels to numeric days
+  const intervalOptions = [
+    { label: "7 Days", value: "7" },
+    { label: "30 Days", value: "30" },
+    { label: "3 Months", value: "90" },
+    { label: "6 Months", value: "180" },
+    { label: "1 Year", value: "365" }
+  ];
+
+  const handleButtonClick = (value) => {
+    setChartInterval(value);
+  };
 
   useEffect(() => {
-    // Optionally, you can fetch live data here using `fetch` or `axios`.
-    const intervalId = setInterval(() => {
-      setData(cryptoData); // Simulating live data update
-    }, 5000); // Update every 5 seconds
+    let isMounted = true;
 
-    return () => clearInterval(intervalId); // Cleanup when the component unmounts
-  }, []);
+    const getChartData = async () => {
+      try {
+        setIsLoading(true);
+        const url = `https://api.coingecko.com/api/v3/coins/${chartId}/market_chart?vs_currency=usd&days=${chartInterval}&interval<daily&precision=3`;
+        const options = {
+          method: "GET",
+          headers: {
+            accept: "application/json",
+            "x-cg-demo-api-key": "CG-zmpnoJX4TvWtzEV5FNAQUVfp"
+          }
+        };
 
+        const response = await fetch(url, options);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data.prices;
+      } catch (error) {
+        console.error("Error fetching chart data:", error);
+        return null;
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    const fetchData = async () => {
+      const data = await getChartData();
+      if (isMounted) {
+        setCryptoDatas(data);
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [chartInterval, chartId]);
 
   return (
     <>
-      <div style={{ display: "flex" }}>
-
+      <div className="heading">Cryptocurrency Price Chart (Line Chart)</div>
+      <div className="button-group-container">
+        <div className="name">Crypto Insights</div>
+        <div className="buttons">
+          {intervalOptions.map((option) => (
+            <button
+              key={option.value}
+              className={`button ${chartInterval === option.value ? 'selected' : ''}`}
+              onClick={() => handleButtonClick(option.value)}
+              disabled={isLoading}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
       </div>
-      <div style={{ padding: '20px', maxWidth: '800px', margin: 'auto' }}>
-        <h2>Cryptocurrency Price Chart (Line Chart)</h2>
 
-        <ReExt
-          xtype="cartesian" // Cartesian chart type
-          config={{     // Set the height
-            width: "100%",     // Full width
-            height: 600,
-            store: {
-              data: data, // Provide data to the chart
-            },
-            theme: "blue",
-            axes: [
-              {
-                type: 'category', // X-axis is based on categories (time)
-                position: 'bottom',
-                fields: ['time'],
-                title: 'Date',
+      <div style={{ maxWidth: '1200px', margin: 'auto', position: "relative", top: "120px" }}>
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : cryptoDatas ? (
+          <ReExt
+            xtype="cartesian"
+            key={chartInterval}
+            config={{
+              width: "100%",
+              height: "70vh",
+              marginBottom: "20px",
+              background: '#5a6f7c',
+              store: {
+                fields: ['time', 'price'],
+                data: cryptoDatas.map(item => ({
+                  time: new Date(item[0]),
+                  price: item[1]
+                })),
               },
-              {
-                type: 'numeric',  // Y-axis is numeric (price)
-                position: 'left',
-                fields: ['price'],
-                title: 'Price (USD)',
-              },
-            ],
-            series:
-              [{
-                type: 'line', // Set the chart type to 'line'
-                xField: 'time', // Time data for the x-axis
-                yField: 'price', // Price data for the y-axis
+              theme: "blue",
+              axes: [
+                {
+                  type: 'time',
+                  position: 'bottom',
+                  fields: ['time'],
+                  title: 'Date',
+                  dateFormat: 'M d, Y',
+                  label: {
+                    rotate: {
+                      degrees: -45
+                    }
+                  },
+                  majorUnit: {
+                    days: chartInterval <= 30 ? 5 : chartInterval <= 90 ? 15 : 30 // Dynamic label spacing
+                  }
+                },
+                {
+                  type: 'numeric',
+                  position: 'left',
+                  fields: ['price'],
+                  title: 'Price (USD)',
+                  renderer: (axis, label) => `$${label.toFixed(2)}`,
+                  increment: 10000
+                },
+              ],
+              series: [{
+                type: 'line',
+                xField: 'time',
+                yField: 'price',
                 title: 'Bitcoin Price',
                 style: {
-                  stroke: '#32CD32', // Line color
-                  lineWidth: 2,      // Line width
-                },
-                marker: {
-                  type: 'circle', // Marker for each data point
-                  size: 4,
                   stroke: '#32CD32',
-                  fill: '#fff',
+                  lineWidth: 2,
                 },
-                highlight: true, // Enable data point highlighting
+                highlight: true,
                 tooltip: {
-                  trackMouse: true, // Tooltip follows the mouse
+                  trackMouse: true,
                   renderer: (tooltip, record) => {
-                    // Customize the tooltip content
-                    const time = record.get("time");
+                    const time = record.get("time").toLocaleDateString();
                     const price = record.get("price");
-                    tooltip.setHtml(`Date: ${time}<br>Price: $${price}`);
+                    tooltip.setHtml(`Date: ${time}<br>Price: $${price.toFixed(2)}`);
                   },
                 },
               }]
-          }}
-        />
+            }}
+          />
+        ) : (
+          <div>No data available</div>
+        )}
       </div>
     </>
   );

@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Header from "./Header";
 import MainContainer from "./MainContainer";
 import CryptoChart from "./Chart";
+import "./index.css"
 
 
 Fill();
@@ -45,10 +46,6 @@ reactroot.render(
       <Router style={{ overflow: "auto" }}>
         <div
           style={{
-            backgroundImage: `url(/background.svg)`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
             minHeight: "100vh",
             margin: "0px auto"
           }}
