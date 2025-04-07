@@ -2,22 +2,23 @@ import ReExt from "@sencha/reext";
 import "./table.css";
 import React, { useEffect, useState } from "react";
 import { fetchMarketData } from "./Api";
+import { useNavigate } from "react-router-dom";
 
 const Table = () => {
   const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(false)
 
   const loadTableData = async () => {
+    setIsLoading(true)
     try {
       const fetchData = await fetchMarketData();
       setData(fetchData);
     } catch (error) {
       console.error("Error fetching All data:", error);
-      setError(error.message);
     } finally {
-      setIsLoading((prev) => (false));
-    }
+      setIsLoading(false)
+    };
   };
 
   useEffect(() => {
@@ -27,6 +28,13 @@ const Table = () => {
     fetchData();
   }, []);
 
+  if (isLoading) {
+    return (
+      <div className="loader-overlay">
+        <div className="loader"></div>
+      </div>
+    )
+  }
   return (
     <>
       <ReExt
@@ -40,7 +48,6 @@ const Table = () => {
           top: "60px",
         }}
         config={{
-          // title: "All List",
           columns: [
             {
               text: "Name",
@@ -94,9 +101,24 @@ const Table = () => {
           },
           tbar: [
             {
+              xtype: "tbtext",
+              text: "Crypto Table",
+              width: 300,
+              style: {
+                padding: "2px 6px",
+                color: "#FFA559",
+                fontWeight: "bold",
+                fontSize: "20px"
+              },
+            },
+            '->',
+            {
               xtype: "textfield",
               emptyText: "Search by name...",
-              width: 200,
+              width: 300,
+              style: {
+                padding: "0px 6px",
+              },
               listeners: {
                 change: (field, newValue) => {
                   const grid = field.up("grid");
@@ -115,11 +137,11 @@ const Table = () => {
           ],
         }}
         onSelect={(grid, selected) => {
-          const selectedRow = selected[0]?.data;
-          if (selectedRow) {
-            console.log("Selected user:", selectedRow);
-          }
-        }}
+          const id = selected?.id;
+          console.log("Navigating to:", id);
+          navigate(`/chart/${id}`);
+        }
+        }
       />
     </>
   );

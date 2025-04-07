@@ -36,30 +36,28 @@ var ReExtData = {
   overrides: false,
 };
 reactroot.render(
-  <React.StrictMode>
-    <ReExtProvider
-      ReExtData={ReExtData}
-      reextkey={
-        "bzJOOXhIaHJzTlZMZG1wXzg3dFR6N3NlQlVNakwwMGNoRDlwUWJobFJTbS45bFRPeWN6TjJVRE4zRWpPaUFIZWxKQ0xpY0dkeFpuZDVFVFp3Qm5NejBHT29KemN0Tm5iNkpXY3FGRE1mUldhc0ppT2lJV2R6SnllLjlKaU4xSXpVSUppT2ljR2JoSnll"
-      }
-      splash={true}
-      style={{ overflow: "auto" }}
-    >
-      <Router style={{ overflow: "auto" }}>
-        <div
-          style={{
-            minHeight: "100vh",
-            margin: "0px auto"
-          }}
-        >
-          <Header />
-          <Routes>
-            <Route path="/" element={<MainContainer />} />
-            <Route path="/dashboard" element={<Table />} />
-            <Route path="/chart" element={<CryptoChart />} />
-          </Routes>
-        </div>
-      </Router>
-    </ReExtProvider>
-  </React.StrictMode>
+  <ReExtProvider
+    ReExtData={ReExtData}
+    reextkey={
+      "c0JhLWV2bnJzQXdvVFRrMEhMRG1VT0xLa1RuTC1uakhtX1g1b284VmJKdC45WkROM1FqTjJVRE4zRWpPaUFIZWxKQ0xpSVRiak5UZTY1bVo1ZzNZelpEZW9kVE40QkhjckpXY3FGRE1mUldhc0ppT2lJV2R6SnllLjlKaU4xSXpVSUppT2ljR2JoSnll"
+    }
+    splash={true}
+    style={{ overflow: "auto" }}
+  >
+    <Router style={{ overflow: "auto" }}>
+      <div
+        style={{
+          minHeight: "100vh",
+          margin: "0px auto"
+        }}
+      >
+        <Header />
+        <Routes>
+          <Route path="/" element={<MainContainer />} />
+          <Route path="/dashboard" element={<Table />} />
+          <Route path="/chart/:id" element={<CryptoChart />} />
+        </Routes>
+      </div>
+    </Router>
+  </ReExtProvider>
 );

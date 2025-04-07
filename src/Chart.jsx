@@ -1,10 +1,11 @@
 import ReExt from '@sencha/reext';
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 const CryptoChart = () => {
+  const { id } = useParams();
   const [cryptoDatas, setCryptoDatas] = useState(null);
   const [chartInterval, setChartInterval] = useState("30");
-  const [chartId, setChartId] = useState("bitcoin");
   const [isLoading, setIsLoading] = useState(false);
 
   const intervalOptions = [
@@ -25,7 +26,7 @@ const CryptoChart = () => {
     const getChartData = async () => {
       try {
         setIsLoading(true);
-        const url = `https://api.coingecko.com/api/v3/coins/${chartId}/market_chart?vs_currency=usd&days=${chartInterval}&interval<daily&precision=3`;
+        const url = `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=${chartInterval}&interval<daily&precision=3`;
         const options = {
           method: "GET",
           headers: {
@@ -60,11 +61,11 @@ const CryptoChart = () => {
     return () => {
       isMounted = false;
     };
-  }, [chartInterval, chartId]);
+  }, [chartInterval, id]);
 
   return (
     <>
-      <div className="heading">Cryptocurrency Price Chart (Line Chart)</div>
+      <div className="heading">Cryptocurrency Price Chart</div>
       <div className="button-group-container">
         <div className="name">Crypto Insights</div>
         <div className="buttons">
@@ -83,7 +84,9 @@ const CryptoChart = () => {
 
       <div style={{ maxWidth: '1200px', margin: 'auto', position: "relative", top: "120px" }}>
         {isLoading ? (
-          <div>Loading...</div>
+          <div className="loader-overlay">
+            <div className="loader"></div>
+          </div>
         ) : cryptoDatas ? (
           <ReExt
             xtype="cartesian"

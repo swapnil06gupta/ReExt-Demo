@@ -7,7 +7,7 @@ const CryptoGrid = ({ data }) => {
     <div >
       <div class="card-header">
         <img src="{image}" alt="Crypto Logo" class="crypto-logo"/>
-        <div class="card-name">{name}</div>
+        <div class="card-name" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap">{name}</div>
         <div class="crypto-pair">
           <div class="crypto-price">{volume}</div>
           <div class="crypo-name" style="text-align: end">Volume</div>
